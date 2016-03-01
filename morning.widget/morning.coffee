@@ -12,41 +12,58 @@ style: """
 
   color: #fff
   font-family: Helvetica Neue, Arial
+  width: 100%;
+  text-align: center;
 
   .container
-   margin-top:30%
-   height:300px
-   width:800px
-   font-weight: lighter
-   font-smoothing: antialiased
-   text-align:center
-   margin-left:30%
-   text-shadow:0px 0px 20px rgba(0,0,0,0.3);
+    margin-top: 120px;
+    font-weight: lighter
+    font-smoothing: antialiased
+    text-align: center;
+    text-shadow: 2px 2px 7px rgba(0,0,0,0.1);
 
   .time
-   font-size: 10em
-   color:#fff
-   font-weight:700
-   text-align:center
+    font-size: 4em
+    color: #fff
+    font-weight: 300
+    text-align: center
 
-  .half
-   font-size:0.15em
-   margin-left: -5%
+  .hour-1
+    margin-left: -.28em;
+
+  .hour-2
+  .hour-3
+  .hour-4
+  .hour-5
+  .hour-6
+  .hour-7
+  .hour-8
+  .hour-9
+  .hour-0
+    margin-left: -.2;
+
+  .minute-1
+    margin-right: -.28em;
+
+  .minute-2
+  .minute-3
+  .minute-4
+  .minute-5
+  .minute-6
+  .minute-7
+  .minute-8
+  .minute-9
+  .minute-0
+    margin-right: -.2em;
 
   .text
-   font-size: 4em
-   color:#fff
-   font-weight:700
-   margin-top:-3%
-
-  .hour
-   margin-right:2%
-
-  .min
-   margin-left:-4%
+    font-size: 2em
+    color: #fff
+    font-weight: 300
+    margin-top: -.3em;
 
   .salutation
-   margin-right:-2%
+    margin-right: -.25em;
 
 """
 
@@ -54,9 +71,9 @@ style: """
 render: -> """
   <div class="container">
   <div class="time">
-  <span class="hour"></span>:
+  <span class="hour"></span>
+  <span class="divider">:</span>
   <span class="min"></span>
-  <span class="half"></span>
   </div>
   <div class="text">
   <span class="salutation"></span>
@@ -70,10 +87,7 @@ render: -> """
 update: (output, domEl) ->
 
   #Options: (true/false)
-  showAmPm = true;
   showName = true;
-  fourTwenty = false; #Smoke Responsibly
-  militaryTime = false; #Military Time = 24 hour time
 
   #Time Segmends for the day
   segments = ["morning", "afternoon", "evening", "night"]
@@ -97,30 +111,15 @@ update: (output, domEl) ->
   timeSegment = segments[2] if 17 < hour <= 24
   timeSegment = segments[3] if  hour <= 4
 
-  #AM/PM String logic
-  if hour < 12
-    half = "AM"
-  else
-    half = "PM"
-
   #0 Hour fix
   hour= 12 if hour == 0;
 
-  #420 Hour
-  if hour == 16 && minutes == 20
-    blazeIt = true
-  else
-    blazeIt = false
-
-  #24 - 12 Hour conversion
-  hour = hour%12 if hour > 12 && !militaryTime
-
   #DOM manipulation
-  if fourTwenty && blazeIt 
-    $(domEl).find('.salutation').text("Blaze It")
-  else
-    $(domEl).find('.salutation').text("Good #{timeSegment}") 
+  $(domEl).find('.salutation').text("Good #{timeSegment}")
   $(domEl).find('.name').text(" , #{name[0]}.") if showName
   $(domEl).find('.hour').text("#{hour}")
   $(domEl).find('.min').text("#{minutes}")
-  $(domEl).find('.half').text("#{half}") if showAmPm && !militaryTime
+  $(domEl).find('.divider').removeClass('hour-1 hour-2 hour-3 hour-4 hour-5 hour-6 hour-7 hour-8 hour-9 hour-0');
+  $(domEl).find('.divider').removeClass('minute-1 minute-2 minute-3 minute-4 minute-5 minute-6 minute-7 minute-8 minute-9 minute-0');
+  $(domEl).find('.divider').removeClass('minute-1 minute-2 minute-3 minute-4 minute-5 minute-6 minute-7 minute-8 minute-9 minute-0');
+  $(domEl).find('.divider').addClass("hour-#{hour%10} minute-#{Math.floor(minutes/10)}");
