@@ -40,7 +40,7 @@ style: """
   .hour-8
   .hour-9
   .hour-0
-    margin-left: -.2;
+    margin-left: -.2em;
 
   .minute-1
     margin-right: -.28em;
